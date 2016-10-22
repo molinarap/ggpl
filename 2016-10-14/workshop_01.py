@@ -5,7 +5,7 @@ from larlib import *
 beams_weights ---> lunghezza delle travi tra i pilastri dell'edificio
 pilars_heights ---> lunghezza dei pilastri dell'edificio
 pilar_weight ---> larghezza di un pilastro
-beam_weight ---> larghezza delle travi, sempre la metà dei pilastri in modo 
+beam_weight ---> larghezza delle travi, sempre la meta' dei pilastri in modo 
 				 che una trave possa sempre poggiare su un pilastro
 """
 beams_weights = [4.0, 4.0]
@@ -14,7 +14,7 @@ pilar_weight = 0.5
 beam_weight = pilar_weight/2.0
 
 """
-inizializzo una struttura vuota in cui verrà costruito il telaio
+inizializzo una struttura vuota in cui verra' costruito il telaio
 """
 p0 = CUBOID([0,0,0])
 arc = STRUCT([p0])
