@@ -1,6 +1,7 @@
 """workshop_02"""
 from larlib import *
 import csv
+import numpy as np
 
 """
 beamsWeights ---> lunghezza delle travi tra i pilastri dell'edificio
@@ -10,25 +11,43 @@ pillarWeight ---> larghezza di un pilastro
 beamWeight ---> larghezza delle travi, sempre la meta' dei pilastri in modo 
 				 che una trave possa sempre poggiare su un pilastro
 """
-beamsWeights = [4.0, 4.0]
-pillarsHeights = [5.0, 2.5, 2.5]
-planDistance = [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ,3.0, 3.0, 3.0, 3.0]
-pillarWeight = 0.5 
-beamWeight = pillarWeight/2.0
 
+# beamsWeights = [4.0, 4.0]
+# pillarsHeights = [5.0, 2.5, 2.5]
+# planDistance = [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ,3.0, 3.0, 3.0, 3.0]
+# pillarWeight = 0.5 
+# beamWeight = pillarWeight/2.0
 
-
+"""
+leggo le dimensioni delle travi e dei pilastri e le distanze tra esse da un file csv
+"""
 with open('./data/frame_data_440651.csv', 'rb') as csvfile:
     dialect = csv.Sniffer().sniff(csvfile.read(1024))
     csvfile.seek(0)
     reader = csv.reader(csvfile, dialect, delimiter=';')
     for i,row in enumerate(reader):
-		print row
-		# beamsWeights = row[0]
-		# pillarsHeights = row[1]
-		# planDistance = row[2]
-		# pillarWeight = row[3] 
-		#beamWeight = row[4]/2.0
+    	if i == 0:
+    		beamsWeights = row
+    		beamsWeights = filter(None, beamsWeights)
+    		beamsWeights = np.array(beamsWeights, dtype=float)
+    		print beamsWeights
+    	if i == 1:
+    		pillarsHeights = row
+    		pillarsHeights = filter(None, pillarsHeights)
+    		pillarsHeights = np.array(pillarsHeights, dtype=float)
+    		print pillarsHeights
+    	if i == 2:
+    		planDistance = row
+    		planDistance = filter(None, planDistance)
+    		planDistance = np.array(planDistance, dtype=float)
+    		print planDistance
+    	if i == 3:
+    		pillarWeight = row[0]
+    		pillarWeight = float(pillarWeight)
+    	if i == 4:
+    		beamWeight = row[0]
+    		beamWeight = float(beamWeight)
+
 
 """
 inizializzo una struttura vuota in cui verra' costruito il telaio
