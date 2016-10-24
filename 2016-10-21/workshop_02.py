@@ -1,6 +1,7 @@
 """workshop_02"""
 from larlib import *
 import csv
+
 """
 beamsWeights ---> lunghezza delle travi tra i pilastri dell'edificio
 pillarsHeights ---> lunghezza dei pilastri dell'edificio
@@ -15,11 +16,20 @@ planDistance = [3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0, 3.0 ,3.0, 3.0, 3.0,
 pillarWeight = 0.5 
 beamWeight = pillarWeight/2.0
 
-# with open('./data.csv', 'rb') as csvfile:
-#     dialect = csv.Sniffer().sniff(csvfile.read(1024))
-#     csvfile.seek(0)
-#     reader = csv.reader(csvfile, dialect)
-    
+
+
+with open('./data/frame_data_440651.csv', 'rb') as csvfile:
+    dialect = csv.Sniffer().sniff(csvfile.read(1024))
+    csvfile.seek(0)
+    reader = csv.reader(csvfile, dialect, delimiter=';')
+    for i,row in enumerate(reader):
+		print row
+		# beamsWeights = row[0]
+		# pillarsHeights = row[1]
+		# planDistance = row[2]
+		# pillarWeight = row[3] 
+		#beamWeight = row[4]/2.0
+
 """
 inizializzo una struttura vuota in cui verra' costruito il telaio
 """
