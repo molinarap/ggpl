@@ -15,4 +15,4 @@ Dato un modello di tetto ricreare il telaio verificandone la planarietà e la co
 ## Replica del modello completa da più visuali
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-04/images/img3.PNG "Replica del modello completa da più visuali")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-04/images/img4.PNG "Replica del modello completa da più visuali")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-04/images/img5..PNG "Replica del modello completa da più visuali")
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-04/images/img5.PNG "Replica del modello completa da più visuali")
