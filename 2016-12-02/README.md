@@ -22,6 +22,6 @@ Piantina con gli stipiti delle porte
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/level-4.jpg "all")
 
 ### Modello 3D creato
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img1.jpg "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img2.jpg "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img3.jpg "all")
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img1.png "all")
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img2.png "all")
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/images/img3.png "all")
