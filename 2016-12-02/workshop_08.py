@@ -23,7 +23,7 @@ level1 = readFile(1)
 level2 = readFile(2)
 """ piantina con le finestre e le porte """
 level3 = readFile(3)
-""" piantina con stipidi delle porte """
+""" piantina con stipiti delle porte """
 level4 = readFile(4)
 
 """ inserisco tutto in un array che andrò a scorrere per costruire un piano sull'altro"""

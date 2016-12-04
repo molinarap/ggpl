@@ -1,18 +1,18 @@
 # WORKSHOP 7
 
 ## Descrizione
-Ricreare dei modelli di porte e finestre
+Creazione di una casa(3D) data una piantina(1D)
 
-## Finestra 1
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/win1.png "all")
-
-## Finestra 2
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/win2.png "all")
-
-## Porta 1
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/door1_1.png "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/door1_2.png "all")
-
-## Porta 2
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/door2_1.png "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2016-11-25/images/door2_2.png "all")
+## Livelli
+### Livello 1
+Contorno della piantina
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/svg/level-1.svg "all")
+### Livello 2
+Piantina con la posizione delle porte
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/svg/level-2.svg "all")
+### Livello 3
+Piantina con la posizione delle porte e delle finestre
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/svg/level-3.svg "all")
+### Livello 4
+Piantina con gli stipiti delle porte 
+![alt text](https://github.com/molinarap/ggpl/blob/master/2016-12-02/svg/level-4.svg "all")
