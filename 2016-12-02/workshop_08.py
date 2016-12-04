@@ -26,7 +26,7 @@ level3 = readFile(3)
 """ piantina con stipiti delle porte """
 level4 = readFile(4)
 
-""" inserisco tutto in un array che andrò a scorrere per costruire un piano sull'altro"""
+""" inserisco tutto in un array che andro' a scorrere per costruire un piano sull'altro"""
 level = [level1,level2,level3,level4,level1]
 
 """ altezza di ogni piano """
