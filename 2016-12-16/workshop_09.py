@@ -1,4 +1,4 @@
-""" WORKSHOP 04 """
+""" WORKSHOP 09 """
 from pyplasm import *
 
 """ texture path """
