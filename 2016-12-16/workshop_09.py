@@ -1,6 +1,9 @@
 """ WORKSHOP 04 """
 from pyplasm import *
 
+roofTexture = "texture/roof.jpg"
+pavTexture = "texture/pav.jpg"
+
 par = 0.2
 
 x = [
@@ -12,7 +15,8 @@ x = [
   14.0, #5
   16.0, #6
   22.0, #7
-  24.0  #8
+  24.0, #8
+  11.0  #9
 ]
 
 y = [
@@ -25,7 +29,8 @@ y = [
   10.0, #6
   12.0, #7
   13.0, #8
-  16.0  #9
+  16.0, #9
+  14.0  #10
 ]
 
 z = [
@@ -37,22 +42,33 @@ vertsStruct = [
   [x[0],y[1],z[0]], #1 ---> esterni
   [x[0],y[7],z[0]], #2
   [x[2],y[7],z[0]], #3
-  [x[4],y[9],z[0]], #4
-  [x[8],y[5],z[0]], #5
+  [x[2],y[9],z[0]], #4
+  [x[8],y[9],z[0]], #5
   [x[8],y[0],z[0]], #6
   [x[5],y[0],z[0]], #7
   [x[5],y[4],z[0]], #8
   [x[1],y[3],z[1]], #9 ---> interni
   [x[1],y[6],z[1]], #10
-  [x[3],y[6],z[1]], #11
-  [x[4],y[8],z[1]], #12
-  [x[7],y[4],z[1]], #13
+  [x[9],y[6],z[1]], #11
+  [x[9],y[10],z[1]], #12
+  [x[7],y[10],z[1]], #13
   [x[7],y[2],z[1]], #14
   [x[6],y[2],z[1]], #15
   [x[6],y[6],z[1]], #16
 ]
 
 cellsStruct = [
+  [1,2,10,9],
+  [2,3,11,10],
+  [3,4,12,11],
+  [4,5,13,12],
+  [5,6,14,13],
+  [6,7,15,14],
+  [7,8,16,15],
+  [8,9,1 ,16]
+]
+
+cellsStructBorder = [
   [1,2],
   [2,3],
   [3,4],
@@ -60,49 +76,19 @@ cellsStruct = [
   [5,6],
   [6,7],
   [7,8],
-  [8,1],
-  [9,10],
-  [10,11],
-  [11,12],
-  [12,13],
-  [13,14],
-  [14,15],
-  [15,16],
-  [16,9],
-  [1,9],
-  [2,10],
-  [3,11],
-  [4,12],
-  [5,13],
-  [6,14],
-  [7,15],
-  [8,16]
-
+  [8,1]
 ]
 
+
 """creazione primitiva del modello"""
-primitiveRoof = MKPOL([vertsStruct, cellsStruct,[1]])
+roof = MKPOL([vertsStruct, cellsStruct,[1]])
+roof = TEXTURE([roofTexture, TRUE, FALSE, 1, 1, 0, 6, 6])(OFFSET([par, par, par])(SKEL_2(roof)))
 
-# """creo il telaio del tetto verificandone la planarieta'"""
-# structRoof = OFFSET([par, par, par])(SKEL_1(primitiveRoof))
-
-# """creo una primitiva copertura del tetto adagiata sul telaio che dovra' essere adattata"""
-# primitiveRoof_t = STRUCT([T([3])([par*2])(primitiveRoof)])
-
-# """estraggo dalle travi del telaio i nuovi punti per adattare la copertura"""
-# coords = UKPOL(primitiveRoof_t)
-# vertsRoof = coords[0]
-# cellsRoof = coords[1]
-
-# """adatto la copertura in modo da coprire tutto il telaio"""
-# vertsRoof = [[x[0],y[2],z[1]+par*2],[x[4],y[3]+par,z[0]+par],[x[4],y[2],z[1]+par*2],[x[0],y[3]+par,z[0]+par],[x[0],y[1]-par,z[0]+par],[x[2],y[2],z[1]+par*2],[x[1]-par,y[1]-par,z[0]+par],[x[0],y[2],z[1]+par*2],[x[4],y[1]-par,z[0]+par],[x[2],y[2],z[1]+par*2],[x[3]+par,y[1]-par,z[0]+par],[x[4],y[2],z[1]+par*2],[x[2],y[0],z[1]+par*2],[x[1]-par,y[1]-par,z[0]+par],[x[1]-par,y[0],z[0]+par],[x[2],y[2],z[1]+par*2],[x[2],y[2],z[1]+par*2],[x[3]+par,y[0],z[0]+par],[x[3]+par,y[1]-par,z[0]+par],[x[2],y[0],z[1]+par*2],[x[0],y[3]+par,z[0]+par],[x[0],y[1]-par,z[0]+par],[x[4],y[3]+par,z[0]+par],[x[4],y[1]-par,z[0]+par],[x[0],y[2],z[1]+par*2],[x[0],y[2],z[0]+par],[x[4],y[2],z[1]+par*2],[x[4],y[2],z[0]+par],[x[3]+par,y[0],z[0]+par],[x[1]-par,y[0],z[0]+par],[x[2],y[2],z[1]+par*2],[x[2],y[2],z[0]+par],[x[2],y[3]+par,z[0]+par],[x[2],y[2],z[1]+par*2],[x[4],y[2],z[0]+par],[x[0],y[2],z[0]+par],[x[2],y[0],z[1]+par*2],[x[2],y[0],z[0]+par]]
-
-# """creo la copertura adattata al telaio in modo che lo ricopra completamente"""
-# panelRoof = MKPOL([vertsRoof, cellsRoof,[1]])
-# panelRoof = COLOR(BROWN)(OFFSET([par, par, par])(SKEL_2(panelRoof)))
+paviment = MKPOL([vertsStruct, [[9,10,16],[13,14,15,16],[11,12,13,16]],[1]])
+paviment = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 6, 6])(OFFSET([par, par, par])(SKEL_2(paviment)))
 
 # """assemblo il telaio alla copertura"""
-# completeRoof = STRUCT([structRoof, panelRoof])
+completeRoof = STRUCT([roof, paviment])
 
-VIEW(primitiveRoof)
+VIEW(completeRoof)
 
