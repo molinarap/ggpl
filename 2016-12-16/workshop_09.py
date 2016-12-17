@@ -1,11 +1,13 @@
 """ WORKSHOP 04 """
 from pyplasm import *
 
+""" texture path """
 roofTexture = "texture/roof.jpg"
 pavTexture = "texture/pav.jpg"
 
 par = 0.2
 
+""" coordinate x,y del poligono non regolare piano"""
 x = [
   1.0,  #0
   3.0,  #1
@@ -80,14 +82,14 @@ cellsStructBorder = [
 ]
 
 
-"""creazione primitiva del modello"""
+""" creazione delle celle date le coordinate del poligono """
 roof = MKPOL([vertsStruct, cellsStruct,[1]])
 roof = TEXTURE([roofTexture, TRUE, FALSE, 1, 1, 0, 6, 6])(OFFSET([par, par, par])(SKEL_2(roof)))
 
+""" creazione della copertura nella zona scoperta del tetto """
 paviment = MKPOL([vertsStruct, [[9,10,16],[13,14,15,16],[11,12,13,16]],[1]])
 paviment = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 6, 6])(OFFSET([par, par, par])(SKEL_2(paviment)))
 
-# """assemblo il telaio alla copertura"""
 completeRoof = STRUCT([roof, paviment])
 
 VIEW(completeRoof)
