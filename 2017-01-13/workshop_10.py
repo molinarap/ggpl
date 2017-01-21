@@ -10,6 +10,7 @@ wallTexture = "texture/wall1.jpg"
 wallStone = "texture/wall5.jpg"
 doorTexture = "texture/white_wood.jpg"
 metalTexture = "texture/metal.jpg"
+glassTexture = "texture/glass.jpg"
 
 zero = CUBOID([.0,.0,.0])
 initStruct = STRUCT([zero])
@@ -31,7 +32,8 @@ def readSvg(l,reading_level,path):
 levelBase = readSvg(0,[],"base")
 levelEst = readSvg(0,[],"esterno")
 levelInt = readSvg(0,[],"interno")
-levelPorte = readSvg(0,[],"porte")
+levelDoors = readSvg(0,[],"porte")
+levelWindows = readSvg(0,[],"finestre")
 
 def createBase(i,s1):
   if i < len(levelBase[0]):
@@ -90,13 +92,13 @@ def createInt(l,i,h,s1):
     return s1
 
 def buildDoors(l,i,h,s1):
-  if l <= len(levelPorte)-1:
-    if i < len(levelPorte[l]):
-      coords = levelPorte[l][i]
+  if l <= len(levelDoors)-1:
+    if i < len(levelDoors[l]):
+      coords = levelDoors[l][i]
       arrayCoords = coords.split(",")
       elem = np.array(arrayCoords, dtype=float)
       build = MKPOL([[[elem[0],elem[1],0.0],[elem[0],elem[3],0.0],[elem[2],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2,3,4]],[1]])
-      buildOffset = OFFSET([1.5, 1.5, heights[l]])(build)
+      buildOffset = OFFSET([3.1, 3.1, 60.0])(build)
       buildTexture = TEXTURE([doorTexture, TRUE, FALSE, 1, 1, 0, 6, 1])(buildOffset)
       buildTraslated = STRUCT([T(3)(h), buildTexture])
       finalStruct = STRUCT([buildTraslated, s1])
@@ -108,8 +110,41 @@ def buildDoors(l,i,h,s1):
       finalStruct = STRUCT([finalStruct,handle_tras])
       return buildDoors(l,i+1,h,finalStruct)
     else:
-      h = h + heights[l] #se e' una porta tiro su di 60
+      h = h + 80.0 #se e' una porta tiro su di 60
       return buildDoors(l+1,0,h,s1)
+  else:
+    return s1
+
+def build(elem,h):
+  q1 = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
+  q1 = OFFSET([3.5, 3.5, 30.0])(q1)
+  q1 = TEXTURE([glassTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q1)
+  q1 = STRUCT([T([3])([5.0]), q1])
+  if (elem[0]-elem[2]<1.0) & (elem[0]-elem[2]>-1.0):
+    q2 = MKPOL([[[elem[0],elem[1]-2,0.0],[elem[2],elem[3]+2,0.0]],[[1,2]],[1]])
+  else:
+    q2 = MKPOL([[[elem[0]+2,elem[1],0.0],[elem[2]-2,elem[3],0.0]],[[1,2]],[1]])
+  q2 = OFFSET([3.5, 3.5, 40.0])(q2)
+  q = DIFF([q2,q1])
+  q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
+  allWindow = STRUCT([q, q1])
+  allWindow = STRUCT([T(3)(h), allWindow])
+  return allWindow
+
+#build([403.22698974609375,-221.86500549316406,403.3810119628906,-221.86500549316406],0)
+
+def buildWindows(l,i,h,s1):
+  if l <= len(levelWindows)-1:
+    if i < len(levelWindows[l]):
+      coords = levelWindows[l][i]
+      arrayCoords = coords.split(",")
+      elem = np.array(arrayCoords, dtype=float)
+      w = build(elem,h)
+      finalStruct = STRUCT([w, s1])
+      return buildWindows(l,i+1,h,finalStruct)
+    else:
+      h = h + 80.0 #se e' una porta tiro su di 60
+      return buildWindows(l+1,0,h,s1)
   else:
     return s1
 
@@ -118,11 +153,13 @@ def createHouse():
   b = createEst(0,0,0.0,initStruct)
   c = createInt(0,0,0.0,initStruct)
   d = buildDoors(0,0,0.0,initStruct)
+  e = buildWindows(0,0,30.0,initStruct)
   house=STRUCT([a,T(3)(3.0),b])
   house=STRUCT([house,T(3)(3.5),c])
   house=STRUCT([house,T(3)(83.0),a])
   house=STRUCT([house,T(3)(163.0),a])
-  house=STRUCT([house,T(3)(3.5),d])
+  house=STRUCT([house,T(3)(3.0),d])
+  house=STRUCT([house,T(3)(3.0),e])
   #house = SKEL_3(house)
   VIEW(house)
 
