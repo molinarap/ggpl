@@ -122,15 +122,23 @@ def build(elem,h):
   q1 = TEXTURE([glassTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q1)
   q1 = STRUCT([T([3])([5.0]), q1])
   if (elem[0]-elem[2]<1.0) & (elem[0]-elem[2]>-1.0):
-    q2 = MKPOL([[[elem[0],elem[1]-2,0.0],[elem[2],elem[3]+2,0.0]],[[1,2]],[1]])
-  else:
-    q2 = MKPOL([[[elem[0]+2,elem[1],0.0],[elem[2]-2,elem[3],0.0]],[[1,2]],[1]])
+    if elem[1]<elem[3]:
+      q2 = MKPOL([[[elem[0],elem[1]-2,0.0],[elem[2],elem[3]+2,0.0]],[[1,2]],[1]])
+    else:
+      q2 = MKPOL([[[elem[0],elem[1]+2,0.0],[elem[2],elem[3]-2,0.0]],[[1,2]],[1]])
+  if (elem[1]-elem[3]<1.0) & (elem[1]-elem[3]>-1.0):
+    if elem[0]<elem[2]:
+      q2 = MKPOL([[[elem[0]-2,elem[1],0.0],[elem[2]+2,elem[3],0.0]],[[1,2]],[1]])
+    else:
+      q2 = MKPOL([[[elem[0]+2,elem[1],0.0],[elem[2]-2,elem[3],0.0]],[[1,2]],[1]])
   q2 = OFFSET([3.5, 3.5, 40.0])(q2)
   q = DIFF([q2,q1])
   q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
   allWindow = STRUCT([q, q1])
   allWindow = STRUCT([T(3)(h), allWindow])
   return allWindow
+
+#build([251.89999389648438,-221.86500549316406,212.3260040283203,-221.86500549316406], 20)
 
 def buildWindows(l,i,h,s1):
   if l <= len(levelWindows)-1:
