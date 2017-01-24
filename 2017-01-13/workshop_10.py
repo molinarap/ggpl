@@ -11,6 +11,7 @@ wallStone = "texture/wall5.jpg"
 doorTexture = "texture/white_wood.jpg"
 metalTexture = "texture/metal.jpg"
 glassTexture = "texture/glass.jpg"
+roofTexture = "texture/roof.jpg"
 
 zero = CUBOID([.0,.0,.0])
 initStruct = STRUCT([zero])
@@ -131,8 +132,6 @@ def build(elem,h):
   allWindow = STRUCT([T(3)(h), allWindow])
   return allWindow
 
-#build([403.22698974609375,-221.86500549316406,403.3810119628906,-221.86500549316406],0)
-
 def buildWindows(l,i,h,s1):
   if l <= len(levelWindows)-1:
     if i < len(levelWindows[l]):
@@ -148,18 +147,62 @@ def buildWindows(l,i,h,s1):
   else:
     return s1
 
+
+def createRoof1(s1):
+  a = levelBase[0][0]
+  a_split = a.split(",")
+  a_number = np.array(a_split, dtype=float)
+  pezzo = MKPOL([[[a_number[0],a_number[1],0.0],[a_number[2],a_number[3],0.0],[(a_number[2]+a_number[0])/2,(a_number[3]+a_number[1])/2,30.0]],[[1,2,3]],[1]])
+  linea = MKPOL([[[a_number[0],a_number[1]],[(a_number[2]+a_number[0])/2-30.0,(a_number[3]+a_number[1])/2]],[[1,2]],[1]])
+  a_pezzo = OFFSET([-3.0, 0.0, 0.0])(pezzo)
+  a_pezzo = TEXTURE([wallTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(a_pezzo)
+  lung = levelBase[0][2]
+  lung_split = lung.split(",")
+  lung_number = np.array(lung_split, dtype=float)
+  lunghezza = lung_number[2] - lung_number[0]
+  a_prod = STRUCT([T([1,3])([lung_number[0]-8,a_number[0]]),(ROTATE([1,3])(-PI/2)(PROD([linea,Q(lunghezza+10)])))])
+  a_prod = OFFSET([3.0, 3.0, 3.0])(a_prod)
+  a_prod = TEXTURE([roofTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(a_prod)
+  s2 = STRUCT([a_pezzo, s1])
+  s2 = STRUCT([a_prod, s2])
+  return s2
+
+def createRoof2(s1):
+  a = levelBase[0][3]
+  a_split = a.split(",")
+  a_number = np.array(a_split, dtype=float)
+  pezzo = MKPOL([[[a_number[0],a_number[1],0.0],[a_number[2],a_number[3],0.0],[(a_number[2]+a_number[0])/2,(a_number[3]+a_number[1])/2,30.0]],[[1,2,3]],[1]])
+  linea = MKPOL([[[a_number[2],a_number[3]],[(a_number[2]+a_number[0])/2-30.0,(a_number[3]+a_number[1])/2]],[[1,2]],[1]])
+  a_pezzo = OFFSET([3.0, 0.0, 0.0])(pezzo)
+  a_pezzo = TEXTURE([wallTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(a_pezzo)
+  lung = levelBase[0][2]
+  lung_split = lung.split(",")
+  lung_number = np.array(lung_split, dtype=float)
+  lunghezza = lung_number[2] - lung_number[0]
+  print(lunghezza)
+  a_prod = STRUCT([T([1,3])([lung_number[0]-8,a_number[0]]),(ROTATE([1,3])(-PI/2)(PROD([linea,Q(lunghezza+10)])))])
+  a_prod = OFFSET([3.0, 3.0, 3.0])(a_prod)
+  a_prod = TEXTURE([roofTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(a_prod)
+  s2 = STRUCT([a_pezzo, s1])
+  s2 = STRUCT([a_prod, s2])
+  return s2
+
 def createHouse():
   a = createBase(0,initStruct)
   b = createEst(0,0,0.0,initStruct)
   c = createInt(0,0,0.0,initStruct)
   d = buildDoors(0,0,0.0,initStruct)
   e = buildWindows(0,0,30.0,initStruct)
+  f = createRoof1(initStruct)
+  g = createRoof2(initStruct)
   house=STRUCT([a,T(3)(3.0),b])
   house=STRUCT([house,T(3)(3.5),c])
   house=STRUCT([house,T(3)(83.0),a])
   house=STRUCT([house,T(3)(163.0),a])
   house=STRUCT([house,T(3)(3.0),d])
   house=STRUCT([house,T(3)(3.0),e])
+  house=STRUCT([house,T(3)(166.0),f])
+  house=STRUCT([house,T(3)(166.0),g])
   #house = SKEL_3(house)
   VIEW(house)
 
