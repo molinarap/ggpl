@@ -44,8 +44,8 @@ def parseLines(l,i, params):
 
 def buildBase(i,s1):
   if i < len(levelBase[0]):
-    coords = parseLines(0,i,levelBase)
-    a_pol = POLYLINE([[coords[0],coords[1]],[coords[2],coords[3]]])
+    params = parseLines(0,i,levelBase)
+    a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
     a_off = OFFSET([4.0, 5.5, 2.0])(a_pol)
     s2 = STRUCT([a_off, s1])
     return buildBase(i+1,s2)
@@ -57,8 +57,8 @@ def buildBase(i,s1):
 def buildExternal(l,i,h,s1):
   if l <= len(levelExternal)-1:
     if i < len(levelExternal[l]):
-      coords = parseLines(l,i,levelExternal)
-      a_pol = MKPOL([[[coords[0],coords[1],0.0],[coords[0],coords[3],0.0],[coords[2],coords[1],0.0],[coords[2],coords[3],0.0]],[[1,2,3,4]],[1]])
+      params = parseLines(l,i,levelExternal)
+      a_pol = MKPOL([[[params[0],params[1],0.0],[params[0],params[3],0.0],[params[2],params[1],0.0],[params[2],params[3],0.0]],[[1,2,3,4]],[1]])
       a_off = OFFSET([3.0, 3.0, level_height[l]])(a_pol)
       if l==0:
         a_texture = TEXTURE([wallStone, TRUE, FALSE, 1, 1, 0, 2, 1])(a_off)
@@ -79,8 +79,8 @@ def buildExternal(l,i,h,s1):
 def buildIntenal(l,i,h,s1):
   if l <= len(levelInternal)-1:
     if i < len(levelInternal[l]):
-      coords = parseLines(l,i,levelInternal)
-      a_pol = MKPOL([[[coords[0],coords[1],0.0],[coords[0],coords[3],0.0],[coords[2],coords[1],0.0],[coords[2],coords[3],0.0]],[[1,2,3,4]],[1]])
+      params = parseLines(l,i,levelInternal)
+      a_pol = MKPOL([[[params[0],params[1],0.0],[params[0],params[3],0.0],[params[2],params[1],0.0],[params[2],params[3],0.0]],[[1,2,3,4]],[1]])
       a_off = OFFSET([1.0, 1.0, level_height[l]])(a_pol)
       a_texture = TEXTURE([wallTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(a_off)
       a_tras = STRUCT([T(3)(h), a_texture])
@@ -142,9 +142,9 @@ def buildOneDoor(elem, j, h, door):
 def buildAllDoors(l,i,h,s1):
   if l <= len(levelDoors)-1:
     if i < len(levelDoors[l]):
-      coords = parseLines(l,i,levelDoors)
-      d = buildOneDoor(coords, 0, h, initStruct)
-      hand = createHandle(coords,initStruct)
+      params = parseLines(l,i,levelDoors)
+      d = buildOneDoor(params, 0, h, initStruct)
+      hand = createHandle(params,initStruct)
       hand = STRUCT([T([3])([h]), hand])
       finalStruct = STRUCT([d, s1, hand])
       return buildAllDoors(l,i+1,h,finalStruct)
@@ -154,33 +154,33 @@ def buildAllDoors(l,i,h,s1):
   else:
     return s1
 
-def buildOneWindow(coords,h):
-  q1 = MKPOL([[[coords[0],coords[1],0.0],[coords[2],coords[3],0.0]],[[1,2]],[1]])
+def buildOneWindow(params,h):
+  q1 = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0]],[[1,2]],[1]])
   q1 = OFFSET([3.5, 3.5, 30.0])(q1)
   q1 = TEXTURE([glassTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q1)
   q1 = STRUCT([T([3])([5.0]), q1])
-  if (coords[0]-coords[2]<1.0) & (coords[0]-coords[2]>-1.0):
-    if coords[1]<coords[3]:
-      q2 = MKPOL([[[coords[0],coords[1]-2,0.0],[coords[2],coords[3]+2,0.0]],[[1,2]],[1]])
+  if (params[0]-params[2]<1.0) & (params[0]-params[2]>-1.0):
+    if params[1]<params[3]:
+      q2 = MKPOL([[[params[0],params[1]-2,0.0],[params[2],params[3]+2,0.0]],[[1,2]],[1]])
     else:
-      q2 = MKPOL([[[coords[0],coords[1]+2,0.0],[coords[2],coords[3]-2,0.0]],[[1,2]],[1]])
-  if (coords[1]-coords[3]<1.0) & (coords[1]-coords[3]>-1.0):
-    if coords[0]<coords[2]:
-      q2 = MKPOL([[[coords[0]-2,coords[1],0.0],[coords[2]+2,coords[3],0.0]],[[1,2]],[1]])
+      q2 = MKPOL([[[params[0],params[1]+2,0.0],[params[2],params[3]-2,0.0]],[[1,2]],[1]])
+  if (params[1]-params[3]<1.0) & (params[1]-params[3]>-1.0):
+    if params[0]<params[2]:
+      q2 = MKPOL([[[params[0]-2,params[1],0.0],[params[2]+2,params[3],0.0]],[[1,2]],[1]])
     else:
-      q2 = MKPOL([[[coords[0]+2,coords[1],0.0],[coords[2]-2,coords[3],0.0]],[[1,2]],[1]])
+      q2 = MKPOL([[[params[0]+2,params[1],0.0],[params[2]-2,params[3],0.0]],[[1,2]],[1]])
   q2 = OFFSET([3.5, 3.5, 40.0])(q2)
   q = DIFF([q2,q1])
   q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
   allWindow = STRUCT([q, q1])
   allWindow = STRUCT([T(3)(h), allWindow])
-  # if (coords[0]-coords[2]<1.0) & (coords[0]-coords[2]>-1.0):
-  #   if coords[1]<coords[3]:
+  # if (params[0]-params[2]<1.0) & (params[0]-params[2]>-1.0):
+  #   if params[1]<params[3]:
   #     allWindow = STRUCT([T(1)(1.0),allWindow])
   #   else:
   #     allWindow = STRUCT([T(1)(0.0),allWindow])
-  # if (coords[1]-coords[3]<1.0) & (coords[1]-coords[3]>-1.0):
-  #   if coords[0]<coords[2]:
+  # if (params[1]-params[3]<1.0) & (params[1]-params[3]>-1.0):
+  #   if params[0]<params[2]:
   #     allWindow = STRUCT([T(2)(1.0),allWindow])
   #   else:
   #     allWindow = STRUCT([T(2)(-1.0),allWindow])
@@ -189,8 +189,8 @@ def buildOneWindow(coords,h):
 def buildAllWindows(l,i,h,s1):
   if l <= len(levelWindows)-1:
     if i < len(levelWindows[l]):
-      coords = parseLines(l,i,levelWindows)
-      w = buildOneWindow(coords,h)
+      params = parseLines(l,i,levelWindows)
+      w = buildOneWindow(params,h)
       finalStruct = STRUCT([w, s1])
       return buildAllWindows(l,i+1,h,finalStruct)
     else:
@@ -200,21 +200,21 @@ def buildAllWindows(l,i,h,s1):
     return s1
 
 def createRoof(i,s1):
-  coords = parseLines(0,i,levelBase)
+  params = parseLines(0,i,levelBase)
   if i==0:
-    truss = MKPOL([[[coords[0],coords[1],0.0],[coords[2],coords[3],0.0],[(coords[2]+coords[0])/2,(coords[3]+coords[1])/2,30.0]],[[1,2,3]],[1]])
-    roof_frame = MKPOL([[[coords[0],coords[1]],[(coords[2]+coords[0])/2-30.0,(coords[3]+coords[1])/2]],[[1,2]],[1]])
+    truss = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0],[(params[2]+params[0])/2,(params[3]+params[1])/2,30.0]],[[1,2,3]],[1]])
+    roof_frame = MKPOL([[[params[0],params[1]],[(params[2]+params[0])/2-30.0,(params[3]+params[1])/2]],[[1,2]],[1]])
     truss = OFFSET([-3.0, 0.0, 0.0])(truss)
   else:
-      truss = MKPOL([[[coords[0],coords[1],0.0],[coords[2],coords[3],0.0],[(coords[2]+coords[0])/2,(coords[3]+coords[1])/2,30.0]],[[1,2,3]],[1]])
-      roof_frame = MKPOL([[[coords[2],coords[3]],[(coords[2]+coords[0])/2-30.0,(coords[3]+coords[1])/2]],[[1,2]],[1]])
+      truss = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0],[(params[2]+params[0])/2,(params[3]+params[1])/2,30.0]],[[1,2,3]],[1]])
+      roof_frame = MKPOL([[[params[2],params[3]],[(params[2]+params[0])/2-30.0,(params[3]+params[1])/2]],[[1,2]],[1]])
       truss = OFFSET([3.0, 0.0, 0.0])(truss)
   truss = TEXTURE([wallTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(truss)
   roof_height = levelBase[0][2]
   roof_height_split = roof_height.split(",")
   roof_height_number = np.array(roof_height_split, dtype=float)
   roof_height = roof_height_number[2] - roof_height_number[0]
-  roof = STRUCT([T([1,3])([roof_height_number[0]-8,coords[0]-1]),(ROTATE([1,3])(-PI/2)(PROD([roof_frame,Q(roof_height+10)])))])
+  roof = STRUCT([T([1,3])([roof_height_number[0]-8,params[0]-1]),(ROTATE([1,3])(-PI/2)(PROD([roof_frame,Q(roof_height+10)])))])
   roof = OFFSET([3.0, 3.0, 3.0])(roof)
   roof = TEXTURE([roofTexture, TRUE, FALSE, 1, 1, 0, 2, 1])(roof)
   s2 = STRUCT([truss, s1])
