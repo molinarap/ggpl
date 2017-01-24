@@ -21,7 +21,7 @@ heights = [60.0,20.0,3.5,60.0,20.0]
 def readSvg(l,reading_level,path):
   file = open("params/"+path+"/lines/level-"+str(l)+".lines","r")
   data = file.read()
-  n = len([name for name in os.listdir("all/"+path+"/lines/")])-2
+  n = len([name for name in os.listdir("params/"+path+"/lines/")])-2
   file.close()
   d = data.splitlines()
   reading_level = reading_level + [d]
