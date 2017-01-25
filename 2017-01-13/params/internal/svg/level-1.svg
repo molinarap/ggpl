@@ -78,23 +78,18 @@
 <g id="Forma_8_1_" style="enable-background:new    ;">
 </g>
 <g id="Forma_13_1_" style="enable-background:new    ;">
-	<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" d="M175.78-106.665"/>
 </g>
 <g id="Forma_15_1_" style="enable-background:new    ;">
 </g>
 <g id="Forma_10_1_" style="enable-background:new    ;">
 </g>
 <g id="Forma_11_1_" style="enable-background:new    ;">
-	<path style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" d="M499.154-185.872"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="330.124" y1="-221.865" x2="330.124" y2="-140.145"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="372.102" y1="-221.865" x2="372.102" y2="-164.085"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="299.938" y1="-109.365" x2="299.938" y2="3.135"/>
+	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="372.102" y1="-221.865" x2="372.102" y2="-109.365"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="267.652" y1="-14.481" x2="267.652" y2="3.135"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="377.851" y1="-83.139" x2="377.851" y2="-65.523"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="377.851" y1="-109.365" x2="377.851" y2="-100.557"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="406.652" y1="-113.769" x2="406.652" y2="-104.961"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="406.652" y1="-140.145" x2="406.652" y2="-133.476"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="372.16" y1="-144.502" x2="372.16" y2="-133.476"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="424.759" y1="-140.145" x2="424.759" y2="-109.365"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="406.652" y1="-83.175" x2="406.652" y2="-31.382"/>
 	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="429.761" y1="-83.175" x2="429.761" y2="-56.215"/>
@@ -104,7 +99,7 @@
 		"/>
 	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="281.316,-109.365 281.607,-109.365 377.851,-109.365 
 			"/>
-	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="330.124,-140.145 330.279,-140.145 381.602,-140.145 
+	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="372.005,-140.145 372.034,-140.145 381.602,-140.145 
 			"/>
 	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="400.978,-140.145 401.111,-140.145 445.023,-140.145 
 			"/>
@@ -122,5 +117,7 @@
 	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="463.628,-39.22 463.69,-39.22 484.3,-39.22 	"/>
 	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="281.269,-29.053 281.325,-29.053 299.938,-29.053 	
 		"/>
+	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="299.938" y1="-109.365" x2="299.938" y2="-100.557"/>
+	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="299.938" y1="-83.248" x2="299.938" y2="3.135"/>
 </g>
 </svg>

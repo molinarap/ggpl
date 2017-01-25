@@ -84,11 +84,11 @@
 <g id="Forma_10_1_" style="enable-background:new    ;">
 </g>
 <g id="Forma_11_1_" style="enable-background:new    ;">
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="257.366" y1="-182.092" x2="257.366" y2="-157.909"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="395.264" y1="-182.092" x2="395.264" y2="-157.909"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="257.366" y1="-64.237" x2="257.366" y2="-43.998"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="395.264" y1="-64.237" x2="395.264" y2="-43.998"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="175.78" y1="-20.431" x2="175.78" y2="-2.356"/>
-	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="175.42" y1="-183.99" x2="175.42" y2="-157.472"/>
+	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="293.815,-111.364 294.011,-111.364 358.815,-111.364 
+			"/>
+	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="358.815" y1="-223.864" x2="358.815" y2="-111.364"/>
+	<line style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" x1="293.815" y1="-223.864" x2="293.815" y2="-111.364"/>
+	<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#212121;" points="293.815,-223.864 294.011,-223.864 358.815,-223.864 
+			"/>
 </g>
 </svg>
