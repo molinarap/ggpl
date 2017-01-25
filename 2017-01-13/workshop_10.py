@@ -35,6 +35,7 @@ levelExternal = readSvg(0,[],"external")
 levelInternal = readSvg(0,[],"internal")
 levelDoors = readSvg(0,[],"doors")
 levelWindows = readSvg(0,[],"windows")
+levelStair = readSvg(0,[],"stair")
 
 def parseLines(l,i, params):
   string_line = params[l][i]
@@ -42,13 +43,13 @@ def parseLines(l,i, params):
   array_line = np.array(split_line, dtype=float)
   return array_line
 
-def buildBase(i,s1):
+def buildFloor1(i,s1):
   if i < len(levelBase[0]):
     params = parseLines(0,i,levelBase)
     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
     a_off = OFFSET([4.0, 5.5, 2.0])(a_pol)
     s2 = STRUCT([a_off, s1])
-    return buildBase(i+1,s2)
+    return buildFloor1(i+1,s2)
   else:
     s1 = SOLIDIFY(SKEL_2(s1))
     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
@@ -92,6 +93,25 @@ def buildIntenal(l,i,h,s1):
   else:
     return s1
 
+# funzione che costruisce una porta
+def buildOneDoor(elem, j, h, door):
+  if j < 13:
+    build = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
+    if not j%2:
+      buildOffset = OFFSET([3.5, 3.5, 8.5])(build)
+      buildTexture = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 6, 1])(buildOffset)
+      buildTras = STRUCT([T([3])([h]), buildTexture])
+      h = h + 8.5
+    else:
+      buildOffset = OFFSET([3.5, 3.5, 0.5])(build)
+      buildTexture = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(buildOffset)
+      buildTras = STRUCT([T([3])([h]), buildTexture])
+      h = h + 0.5
+    door = STRUCT([buildTras,door])
+    return buildOneDoor(elem, j+1, h, door)
+  else:
+    return door
+
 def createHandle(elem,s1):
   handle = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
   handle0 = OFFSET([8.0, 1.0, 1.0])(handle)
@@ -119,25 +139,6 @@ def createHandle(elem,s1):
   handle_all = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(handle_all)
   s1 = STRUCT([s1,handle_all])
   return s1
-
-# funzione che costruisce una porta
-def buildOneDoor(elem, j, h, door):
-  if j < 13:
-    build = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
-    if not j%2:
-      buildOffset = OFFSET([3.5, 3.5, 8.5])(build)
-      buildTexture = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 6, 1])(buildOffset)
-      buildTras = STRUCT([T([3])([h]), buildTexture])
-      h = h + 8.5
-    else:
-      buildOffset = OFFSET([3.5, 3.5, 0.5])(build)
-      buildTexture = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(buildOffset)
-      buildTras = STRUCT([T([3])([h]), buildTexture])
-      h = h + 0.5
-    door = STRUCT([buildTras,door])
-    return buildOneDoor(elem, j+1, h, door)
-  else:
-    return door
 
 def buildAllDoors(l,i,h,s1):
   if l <= len(levelDoors)-1:
@@ -199,7 +200,7 @@ def buildAllWindows(l,i,h,s1):
   else:
     return s1
 
-def createRoof(i,s1):
+def buildRoof(i,s1):
   params = parseLines(0,i,levelBase)
   if i==0:
     truss = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0],[(params[2]+params[0])/2,(params[3]+params[1])/2,30.0]],[[1,2,3]],[1]])
@@ -221,18 +222,54 @@ def createRoof(i,s1):
   s2 = STRUCT([roof, s2])
   return s2
 
+def buildFloor2(i,base,s1):
+  if i < len(levelStair[0]):
+    params = parseLines(0,i,levelStair)
+    a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+    a_off = OFFSET([4.0, 5.5, 2.0])(a_pol)
+    s2 = STRUCT([a_off, s1])
+    return buildFloor2(i+1,base,s2)
+  else:
+    s1 = SOLIDIFY(SKEL_2(s1))
+    s1 = DIFF([base,s1])
+    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    return s1
+
+
+# def buildStair(tempLength,tempHeight,s1):
+#   params = parseLines(0,3,levelStair)
+#   params2 = parseLines(0,0,levelStair)
+#   height = 80.0
+#   steps=10.0
+#   length = (params2[2]-params2[0])
+#   build = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+#   buildOffset = OFFSET([5.0, (length/steps), (height/steps)])(build)
+#   traslation=STRUCT([T([1,2,3])([0.5,tempLength+(length/steps),tempHeight]),buildOffset])
+#   tempLength=tempLength + (length/steps)
+#   tempHeight=tempHeight + (height/steps)
+#   s1=STRUCT([traslation,s1])
+#   if tempLength < length:
+#     return buildStair(tempLength, tempHeight, s1)
+#   else:
+#     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+#     s1=STRUCT([traslation,s1])
+#     return s1
+
 def buildHouse():
-  base_level = buildBase(0,initStruct)
+  floor1_level = buildFloor1(0,initStruct)
+  floor2_level = buildFloor2(0,floor1_level,initStruct)
   external_level = buildExternal(0,0,0.0,initStruct)
   internal_level = buildIntenal(0,0,0.0,initStruct)
   doors_level = buildAllDoors(0,0,0.0,initStruct)
   windows_level = buildAllWindows(0,0,30.0,initStruct)
-  roof_level_1 = createRoof(0,initStruct)
-  roof_level_2 = createRoof(3,initStruct)
-  house=STRUCT([base_level,T(3)(3.0),external_level])
+  roof_level_1 = buildRoof(0,initStruct)
+  roof_level_2 = buildRoof(3,initStruct)
+  #stairs_level = buildStair(0.0,0.0,initStruct)
+  house=STRUCT([floor1_level,T(3)(3.0),external_level])
+  #house=STRUCT([house,T(3)(3.5),stairs_level])
   house=STRUCT([house,T(3)(3.5),internal_level])
-  house=STRUCT([house,T(3)(83.0),base_level])
-  house=STRUCT([house,T(3)(163.0),base_level])
+  house=STRUCT([house,T(3)(83.0),floor2_level])
+  house=STRUCT([house,T(3)(163.0),floor1_level])
   house=STRUCT([house,T(3)(3.0),doors_level])
   house=STRUCT([house,T(3)(3.0),windows_level])
   house=STRUCT([house,T(3)(163.0),roof_level_1])
