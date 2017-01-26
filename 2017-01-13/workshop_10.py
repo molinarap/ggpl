@@ -242,25 +242,39 @@ def buildFloor2(i,base,s1):
     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
     return s1
 
-
-# def buildStair(tempLength,tempHeight,s1):
-#   params = parseLines(0,3,levelStair)
-#   params2 = parseLines(0,0,levelStair)
-#   height = 80.0
-#   steps=10.0
-#   length = (params2[2]-params2[0])
-#   build = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
-#   buildOffset = OFFSET([5.0, (length/steps), (height/steps)])(build)
-#   traslation=STRUCT([T([1,2,3])([0.5,tempLength+(length/steps),tempHeight]),buildOffset])
-#   tempLength=tempLength + (length/steps)
-#   tempHeight=tempHeight + (height/steps)
-#   s1=STRUCT([traslation,s1])
-#   if tempLength < length:
-#     return buildStair(tempLength, tempHeight, s1)
+# def buildRailing(i,base,s1):
+#   if i < len(levelStair[0]):
+#     params = parseLines(0,i,levelStair)
+#     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+#     a_off = OFFSET([4.0, 5.5, 2.0])(a_pol)
+#     s2 = STRUCT([a_off, s1])
+#     return buildRailing(i+1,base,s2)
 #   else:
 #     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
-#     s1=STRUCT([traslation,s1])
 #     return s1
+
+def buildStair(tempLength,tempHeight,s1):
+  params = parseLines(0,3,levelStair)
+  params2 = parseLines(0,0,levelStair)
+  height = 80.0
+  height_step = 5.44
+  steps=height/height_step
+  steps=height/steps
+  length_step = 13.0
+  #length = steps*length_step
+  length = (params2[2]-params2[0])
+  build = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+  buildOffset = OFFSET([5.0, length_step, height_step])(build)
+  traslation=STRUCT([T([1,2,3])([0.5,tempLength+length_step,tempHeight]),buildOffset])
+  tempLength=tempLength + length_step/2
+  tempHeight=tempHeight + height_step
+  s1=STRUCT([traslation,s1])
+  if tempHeight < height:
+    return buildStair(tempLength, tempHeight, s1)
+  else:
+    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1=STRUCT([traslation,s1])
+    return s1
 
 def buildHouse():
   floor1_level = buildFloor1(0,initStruct)
@@ -271,9 +285,9 @@ def buildHouse():
   windows_level = buildAllWindows(0,0,30.0,initStruct)
   roof_level_1 = buildRoof(0,initStruct)
   roof_level_2 = buildRoof(3,initStruct)
-  #stairs_level = buildStair(0.0,0.0,initStruct)
+  stairs_level = buildStair(0.0,0.0,initStruct)
   house=STRUCT([floor1_level,T(3)(3.0),external_level])
-  #house=STRUCT([house,T(3)(3.5),stairs_level])
+  house=STRUCT([house,T(3)(3.5),stairs_level])
   house=STRUCT([house,T(3)(3.5),internal_level])
   house=STRUCT([house,T(3)(83.0),floor2_level])
   house=STRUCT([house,T(3)(163.0),floor1_level])
