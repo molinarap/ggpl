@@ -18,14 +18,21 @@ initStruct = STRUCT([zero])
 level_height = [30.0,30.0,20.0,30.0,30.0,20.0]
 heights = [60.0,20.0,3.5,60.0,20.0]
 
+def countFileDirectory(path):
+  i = 0
+  for name in os.listdir(path):
+      if not name.startswith('.'):
+        i = i + 1
+  return i
+
 def readSvg(l,reading_level,path):
   file = open("params/"+path+"/lines/level-"+str(l)+".lines","r")
   data = file.read()
-  n = len([name for name in os.listdir("params/"+path+"/lines/")])-2
+  n = countFileDirectory("params/"+path+"/lines/")
   file.close()
   d = data.splitlines()
   reading_level = reading_level + [d]
-  if l<n:
+  if l!=n-1:
     return readSvg(l+1,reading_level,path)
   else:
     return reading_level
