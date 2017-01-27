@@ -165,33 +165,29 @@ def buildAllDoors(l,i,h,s1):
 def buildOneWindow(params,h):
   q1 = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0]],[[1,2]],[1]])
   q1 = OFFSET([3.5, 3.5, 30.0])(q1)
+  #q1 = STRUCT([T(3)(5.0), q1])
   q1 = TEXTURE([glassTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q1)
-  q1 = STRUCT([T([3])([5.0]), q1])
+  q1 = MATERIAL([0,1.36,2.55,0.5,  0,1,0,0.5, 0,0,1,0, 0,0,0,0.5, 100])(q1)
   if (params[0]-params[2]<1.0) & (params[0]-params[2]>-1.0):
     if params[1]<params[3]:
-      q2 = MKPOL([[[params[0],params[1]-2,0.0],[params[2],params[3]+2,0.0]],[[1,2]],[1]])
+      q2 = MKPOL([[[params[0],params[1]-2.0,0.0],[params[2],params[3]+2.0,0.0]],[[1,2]],[1]])
+      q2 = OFFSET([3.5, 3.5, 40.0])(q2)
     else:
-      q2 = MKPOL([[[params[0],params[1]+2,0.0],[params[2],params[3]-2,0.0]],[[1,2]],[1]])
+      q2 = MKPOL([[[params[0],params[1]+2.0,0.0],[params[2],params[3]-2.0,0.0]],[[1,2]],[1]])
+      q2 = OFFSET([3.5, 3.5, 40.0])(q2)
   if (params[1]-params[3]<1.0) & (params[1]-params[3]>-1.0):
     if params[0]<params[2]:
-      q2 = MKPOL([[[params[0]-2,params[1],0.0],[params[2]+2,params[3],0.0]],[[1,2]],[1]])
+      q2 = MKPOL([[[params[0]-2.0,params[1],0.0],[params[2]+2.0,params[3],0.0]],[[1,2]],[1]])
+      q2 = OFFSET([3.5, 3.5, 40.0])(q2)
     else:
-      q2 = MKPOL([[[params[0]+2,params[1],0.0],[params[2]-2,params[3],0.0]],[[1,2]],[1]])
-  q2 = OFFSET([3.5, 3.5, 40.0])(q2)
-  q = DIFF([q2,q1])
-  q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
-  allWindow = STRUCT([q, q1])
+      q2 = MKPOL([[[params[0]+2.0,params[1],0.0],[params[2]-2.0,params[3],0.0]],[[1,2]],[1]])
+      q2 = OFFSET([3.5, 3.5, 40.0])(q2)
+  q2 = STRUCT([T(3)(-3.5), q2])
+  q2 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
+  q = DIFFERENCE([q2,q1])
+  q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q)
+  allWindow = STRUCT([q,q1])
   allWindow = STRUCT([T(3)(h), allWindow])
-  # if (params[0]-params[2]<1.0) & (params[0]-params[2]>-1.0):
-  #   if params[1]<params[3]:
-  #     allWindow = STRUCT([T(1)(1.0),allWindow])
-  #   else:
-  #     allWindow = STRUCT([T(1)(0.0),allWindow])
-  # if (params[1]-params[3]<1.0) & (params[1]-params[3]>-1.0):
-  #   if params[0]<params[2]:
-  #     allWindow = STRUCT([T(2)(1.0),allWindow])
-  #   else:
-  #     allWindow = STRUCT([T(2)(-1.0),allWindow])
   return allWindow
 
 def buildAllWindows(l,i,h,s1):
@@ -293,7 +289,6 @@ def buildAllRailing(i,z,s1):
     s1 = STRUCT([r1,s1,r2])
     s1=STRUCT([T(2)(5.0),s1])
     return s1
-
 
 def buildStair(tempLength,tempHeight,s1):
   params = parseLines(0,3,levelStair)
