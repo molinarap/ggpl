@@ -242,16 +242,58 @@ def buildFloor2(i,base,s1):
     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
     return s1
 
-# def buildRailing(i,base,s1):
-#   if i < len(levelStair[0]):
-#     params = parseLines(0,i,levelStair)
-#     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
-#     a_off = OFFSET([4.0, 5.5, 2.0])(a_pol)
-#     s2 = STRUCT([a_off, s1])
-#     return buildRailing(i+1,base,s2)
-#   else:
-#     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
-#     return s1
+def buildRail(i,z,s1):
+  if i < 4:
+    params = parseLines(0,i,levelStair)
+    a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+    a_off = OFFSET([1.0, 1.0, z])(a_pol)
+    s2 = STRUCT([a_off, s1])
+    return buildRail(i+1,z,s2)
+  else:
+    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    return s1
+
+def rail1(params,z,i,s1):
+  length = params[3]-params[1]
+  if i < length:
+    ct = MKPOL([[[params[0],params[1]],[params[2],params[3]-110.0]],[[1,2]],[1]])
+    ct = OFFSET([1.0, 1.0, z])(ct)
+    ct = STRUCT([T(2)(i),ct])
+    ct = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
+    s1 = STRUCT([s1, ct])
+    return rail1(params,z,i+10,s1)
+  else:
+    return s1
+
+def rail2(params,z,i,s1):
+  length = params[2]-params[0]
+  if i < length:
+    ct = MKPOL([[[params[0],params[1]],[params[2]-60.0,params[3]]],[[1,2]],[1]])
+    ct = OFFSET([1.0, 1.0, z])(ct)
+    ct = STRUCT([T(1)(i),ct])
+    ct = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
+    s1 = STRUCT([s1, ct])
+    return rail2(params,z,i+10,s1)
+  else:
+    return s1
+
+def buildAllRailing(i,z,s1):
+  if i < 4:
+    params = parseLines(0,i,levelStair)
+    if i!=3:
+      c = rail1(params,z,0,s1)
+    else:
+      c = rail2(params,z,0,s1)
+    s1 = STRUCT([s1,c])
+    return buildAllRailing(i+1,z,s1)
+  else:
+    rail = buildRail(1,1.0,initStruct)
+    r1=STRUCT([T(3)(1.0),rail])
+    r2=STRUCT([T(3)(22.0),rail])
+    s1 = STRUCT([r1,s1,r2])
+    s1=STRUCT([T(2)(5.0),s1])
+    return s1
+
 
 def buildStair(tempLength,tempHeight,s1):
   params = parseLines(0,3,levelStair)
@@ -286,8 +328,10 @@ def buildHouse():
   roof_level_1 = buildRoof(0,initStruct)
   roof_level_2 = buildRoof(3,initStruct)
   stairs_level = buildStair(0.0,0.0,initStruct)
+  railing_level = buildAllRailing(0,21.0,initStruct)
   house=STRUCT([floor1_level,T(3)(3.0),external_level])
   house=STRUCT([house,T(3)(3.5),stairs_level])
+  house=STRUCT([house,T(3)(83.0),railing_level])
   house=STRUCT([house,T(3)(3.5),internal_level])
   house=STRUCT([house,T(3)(83.0),floor2_level])
   house=STRUCT([house,T(3)(163.0),floor1_level])
