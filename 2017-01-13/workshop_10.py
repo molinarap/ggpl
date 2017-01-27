@@ -6,12 +6,14 @@ import sys, os
 sys.setrecursionlimit(1500)
 
 pavTexture = "texture/pav2.png"
-wallTexture = "texture/wall1.jpg"
+doorWindowsTexture = "texture/pav2.png"
+wallTexture = "texture/wall2.jpg"
 wallStone = "texture/wall5.jpg"
 doorTexture = "texture/white_wood.jpg"
 metalTexture = "texture/metal.jpg"
 glassTexture = "texture/glass.jpg"
 roofTexture = "texture/roof.jpg"
+stairTexture = "texture/stair.jpg"
 
 zero = CUBOID([.0,.0,.0])
 initStruct = STRUCT([zero])
@@ -59,7 +61,7 @@ def buildFloor1(i,s1):
     return buildFloor1(i+1,s2)
   else:
     s1 = SOLIDIFY(SKEL_2(s1))
-    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 16, 1])(s1)
     return s1
 
 def buildExternal(l,i,h,s1):
@@ -106,7 +108,7 @@ def buildOneDoor(elem, j, h, door):
     build = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
     if not j%2:
       buildOffset = OFFSET([3.5, 3.5, 8.5])(build)
-      buildTexture = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 6, 1])(buildOffset)
+      buildTexture = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 6, 1])(buildOffset)
       buildTras = STRUCT([T([3])([h]), buildTexture])
       h = h + 8.5
     else:
@@ -167,7 +169,7 @@ def buildOneWindow(params,h):
   q1 = OFFSET([3.5, 3.5, 30.0])(q1)
   #q1 = STRUCT([T(3)(5.0), q1])
   q1 = TEXTURE([glassTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q1)
-  q1 = MATERIAL([0,1.36,2.55,0.5,  0,1,0,0.5, 0,0,1,0, 0,0,0,0.5, 100])(q1)
+  q1 = MATERIAL([2.55,2.55,2.55,0.5,  0,1,0,0.5, 0,0,1,0, 0,0,0,0.5, 100])(q1)
   if (params[0]-params[2]<1.0) & (params[0]-params[2]>-1.0):
     if params[1]<params[3]:
       q2 = MKPOL([[[params[0],params[1]-2.0,0.0],[params[2],params[3]+2.0,0.0]],[[1,2]],[1]])
@@ -183,9 +185,9 @@ def buildOneWindow(params,h):
       q2 = MKPOL([[[params[0]+2.0,params[1],0.0],[params[2]-2.0,params[3],0.0]],[[1,2]],[1]])
       q2 = OFFSET([3.5, 3.5, 40.0])(q2)
   q2 = STRUCT([T(3)(-3.5), q2])
-  q2 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
+  q2 = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q2)
   q = DIFFERENCE([q2,q1])
-  q = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q)
+  q = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(q)
   allWindow = STRUCT([q,q1])
   allWindow = STRUCT([T(3)(h), allWindow])
   return allWindow
@@ -235,7 +237,7 @@ def buildFloor2(i,base,s1):
   else:
     s1 = SOLIDIFY(SKEL_2(s1))
     s1 = DIFF([base,s1])
-    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 16, 1])(s1)
     return s1
 
 def buildRail(i,z,s1):
@@ -246,7 +248,7 @@ def buildRail(i,z,s1):
     s2 = STRUCT([a_off, s1])
     return buildRail(i+1,z,s2)
   else:
-    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1 = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
     return s1
 
 def rail1(params,z,i,s1):
@@ -255,7 +257,7 @@ def rail1(params,z,i,s1):
     ct = MKPOL([[[params[0],params[1]],[params[2],params[3]-110.0]],[[1,2]],[1]])
     ct = OFFSET([1.0, 1.0, z])(ct)
     ct = STRUCT([T(2)(i),ct])
-    ct = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
+    ct = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
     s1 = STRUCT([s1, ct])
     return rail1(params,z,i+10,s1)
   else:
@@ -267,7 +269,7 @@ def rail2(params,z,i,s1):
     ct = MKPOL([[[params[0],params[1]],[params[2]-60.0,params[3]]],[[1,2]],[1]])
     ct = OFFSET([1.0, 1.0, z])(ct)
     ct = STRUCT([T(1)(i),ct])
-    ct = TEXTURE([metalTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
+    ct = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(ct)
     s1 = STRUCT([s1, ct])
     return rail2(params,z,i+10,s1)
   else:
@@ -309,7 +311,7 @@ def buildStair(tempLength,tempHeight,s1):
   if tempHeight < height:
     return buildStair(tempLength, tempHeight, s1)
   else:
-    s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1 = TEXTURE([doorWindowsTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
     s1=STRUCT([traslation,s1])
     return s1
 
@@ -334,6 +336,24 @@ def buildHouse():
   house=STRUCT([house,T(3)(3.0),windows_level])
   house=STRUCT([house,T(3)(163.0),roof_level_1])
   house=STRUCT([house,T(3)(163.0),roof_level_2])
-  VIEW(house)
+  return house
 
-buildHouse()
+
+def createMoreHouse(i,s1,d):
+  if i < 1:
+    print(i)
+    h1=STRUCT([T([1,2,3])([d,0.0,0.0]),buildHouse()])
+    s1= STRUCT([h1, s1])
+    return createMoreHouse(i+1,s1,d+600.0)
+  else:
+    VIEW(s1)
+
+createMoreHouse(0,initStruct,0.0)
+
+
+
+
+
+
+
+
