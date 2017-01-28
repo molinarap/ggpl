@@ -5,6 +5,7 @@ import sys, os
 
 sys.setrecursionlimit(1500)
 
+"""texture vari livelli della casa"""
 pavTexture = "texture/pav2.png"
 doorWindowsTexture = "texture/pav2.png"
 wallTexture = "texture/wall2.jpg"
@@ -15,11 +16,15 @@ glassTexture = "texture/glass.jpg"
 roofTexture = "texture/roof.jpg"
 stairTexture = "texture/stair.jpg"
 
+"""struttra iniziale di appoggio"""
 zero = CUBOID([.0,.0,.0])
 initStruct = STRUCT([zero])
+
+"""misure per la costruzione dei vari livelli della casa"""
 level_height = [30.0,30.0,20.0,30.0,30.0,20.0]
 heights = [60.0,20.0,3.5,60.0,20.0]
 
+"""funzione che conta i file contenuti in una directory"""
 def countFileDirectory(path):
   i = 0
   for name in os.listdir(path):
@@ -27,6 +32,7 @@ def countFileDirectory(path):
         i = i + 1
   return i
 
+"""funzione che legge i file lines di tutti i livelli della casa"""
 def readSvg(l,reading_level,path):
   file = open("params/"+path+"/lines/level-"+str(l)+".lines","r")
   data = file.read()
@@ -46,12 +52,15 @@ levelDoors = readSvg(0,[],"doors")
 levelWindows = readSvg(0,[],"windows")
 levelStair = readSvg(0,[],"stair")
 
+"""funzioni che trasforma le stringhe di punto dei file lines in array"""
 def parseLines(l,i, params):
   string_line = params[l][i]
   split_line = string_line.split(",")
   array_line = np.array(split_line, dtype=float)
   return array_line
 
+"""funzione che dati i file lines contenuti nell cartella /params/base/lines"""
+"""costuisce la base della casa"""
 def buildFloor1(i,s1):
   if i < len(levelBase[0]):
     params = parseLines(0,i,levelBase)
@@ -64,6 +73,8 @@ def buildFloor1(i,s1):
     s1 = TEXTURE([pavTexture, TRUE, FALSE, 1, 1, 0, 16, 1])(s1)
     return s1
 
+"""funzione che dati i file lines contenuti nell cartella /params/external/lines"""
+"""costuisce i muri esterni della casa"""
 def buildExternal(l,i,h,s1):
   if l <= len(levelExternal)-1:
     if i < len(levelExternal[l]):
@@ -86,6 +97,8 @@ def buildExternal(l,i,h,s1):
   else:
     return s1
 
+"""funzione che dati i file lines contenuti nell cartella /params/internal/lines"""
+"""costuisce i muri interni della casa"""
 def buildIntenal(l,i,h,s1):
   if l <= len(levelInternal)-1:
     if i < len(levelInternal[l]):
@@ -102,7 +115,7 @@ def buildIntenal(l,i,h,s1):
   else:
     return s1
 
-# funzione che costruisce una porta
+"""funzione che dati i parametri costruisce una singola porta"""
 def buildOneDoor(elem, j, h, door):
   if j < 13:
     build = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
@@ -121,6 +134,8 @@ def buildOneDoor(elem, j, h, door):
   else:
     return door
 
+"""funzione che dati i parametri per la costruzione della porta crea una maniglia"""
+"""posizionandola in maniera ottimale sulla porta"""
 def createHandle(elem,s1):
   handle = MKPOL([[[elem[0],elem[1],0.0],[elem[2],elem[3],0.0]],[[1,2]],[1]])
   handle0 = OFFSET([8.0, 1.0, 1.0])(handle)
@@ -149,6 +164,9 @@ def createHandle(elem,s1):
   s1 = STRUCT([s1,handle_all])
   return s1
 
+"""funzione che dati i file lines contenuti nell cartella /params/doors/lines"""
+"""costuisce le porte della casa su ogni piano"""
+"""utilizza la funzione buildOneDoor(...) e createHandle(...)"""
 def buildAllDoors(l,i,h,s1):
   if l <= len(levelDoors)-1:
     if i < len(levelDoors[l]):
@@ -164,6 +182,7 @@ def buildAllDoors(l,i,h,s1):
   else:
     return s1
 
+"""funzione che dati i parametri costruisce una singola finestra"""
 def buildOneWindow(params,h):
   q1 = MKPOL([[[params[0],params[1],0.0],[params[2],params[3],0.0]],[[1,2]],[1]])
   q1 = OFFSET([3.5, 3.5, 30.0])(q1)
@@ -192,6 +211,9 @@ def buildOneWindow(params,h):
   allWindow = STRUCT([T(3)(h), allWindow])
   return allWindow
 
+"""funzione che dati i file lines contenuti nell cartella /params/windows/lines"""
+"""costuisce le finestre della casa su ogni piano"""
+"""utilizza la funzione buildOneWindow(...)"""
 def buildAllWindows(l,i,h,s1):
   if l <= len(levelWindows)-1:
     if i < len(levelWindows[l]):
@@ -205,6 +227,9 @@ def buildAllWindows(l,i,h,s1):
   else:
     return s1
 
+
+"""funzione che dati i file lines contenuti nell cartella /params/base/lines"""
+"""costruisce il tetto andando a costruite una travatura di appoggio"""
 def buildRoof(i,s1):
   params = parseLines(0,i,levelBase)
   if i==0:
@@ -227,6 +252,8 @@ def buildRoof(i,s1):
   s2 = STRUCT([roof, s2])
   return s2
 
+"""funzione che dati i file lines contenuti nell cartella /params/stair/lines"""
+"""crea una nuova base con l'apertura per l'insermento delle scale"""
 def buildFloor2(i,base,s1):
   if i < len(levelStair[0]):
     params = parseLines(0,i,levelStair)
@@ -275,6 +302,8 @@ def rail2(params,z,i,s1):
   else:
     return s1
 
+"""funzione che dati i file lines contenuti nell cartella /params/stair/lines"""
+"""crea una ringhiera posizionata al secondo piano della casa all'interno del corridoio"""
 def buildAllRailing(i,z,s1):
   if i < 4:
     params = parseLines(0,i,levelStair)
@@ -292,6 +321,8 @@ def buildAllRailing(i,z,s1):
     s1=STRUCT([T(2)(5.0),s1])
     return s1
 
+"""funzione che dati i file lines contenuti nell cartella /params/stair/lines"""
+"""crea una scala che porta dal primo al secondo piano"""
 def buildStair(tempLength,tempHeight,s1):
   params = parseLines(0,3,levelStair)
   params2 = parseLines(0,0,levelStair)
@@ -315,6 +346,8 @@ def buildStair(tempLength,tempHeight,s1):
     s1=STRUCT([traslation,s1])
     return s1
 
+"""funzione che date le funzioni elencate sopra si occupa"""
+"""della costruzione e assamblaggio di tutta la casa"""
 def buildHouse():
   floor1_level = buildFloor1(0,initStruct)
   floor2_level = buildFloor2(0,floor1_level,initStruct)
@@ -338,7 +371,8 @@ def buildHouse():
   house=STRUCT([house,T(3)(163.0),roof_level_2])
   return house
 
-
+"""funzione per la costruziones di una o piu' case"""
+"""distanziate tra loro"""
 def createMoreHouse(i,s1,d):
   if i < 1:
     print(i)
