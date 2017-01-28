@@ -36,6 +36,9 @@ I livelli sono divisi in:
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-13/images/img2.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-13/images/img3.png "all")
 
+##Porticato
+![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-13/images/img8.png "all")
+
 ##Porte e finestre
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-13/images/img5.png "all")
 
