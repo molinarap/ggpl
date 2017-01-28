@@ -3,20 +3,25 @@ from pyplasm import *
 import numpy as np
 import sys, os
 
+sys.path.append("house")
+import house
+
 sys.setrecursionlimit(1500)
 
 grassTexture = "texture/grass.jpg"
 asphaltTexture = "texture/asphalt.jpg"
+pianoTexture = "texture/stair.jpg"
 
 zero = CUBOID([.0,.0,.0])
 initStruct = STRUCT([zero])
 level_height = [30.0,30.0,20.0,30.0,30.0,20.0]
 heights = [60.0,20.0,3.5,60.0,20.0]
 
+
 def countFileDirectory(path):
   i = 0
   for name in os.listdir(path):
-      if not name.startswith('.'):
+      if not name.startswith("."):
         i = i + 1
   return i
 
@@ -35,6 +40,7 @@ def readSvg(l,reading_level,path):
 levelBase = readSvg(0,[],"base")
 levelStreet = readSvg(0,[],"street")
 levelHouse = readSvg(0,[],"house")
+levelPiano = readSvg(0,[],"piano")
 
 def parseLines(l,i, params):
   string_line = params[l][i]
@@ -58,34 +64,52 @@ def buildStreet(i,s1):
   if i < len(levelStreet[0]):
     params = parseLines(0,i,levelStreet)
     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
-    a_off = OFFSET([0.0, 0.0, 5.0])(a_pol)
+    a_off = OFFSET([0.0, 0.0, 3.0])(a_pol)
     s2 = STRUCT([a_off, s1])
     return buildStreet(i+1,s2)
   else:
-    #s1 = SOLIDIFY(SKEL_2(s1))
+    s1 = SOLIDIFY(SKEL_2(s1))
     s1=STRUCT([T(3)(5.0),s1])
-    #s1 = TEXTURE([asphaltTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    s1 = TEXTURE([asphaltTexture, TRUE, FALSE, 1, 1, 0, 1, 10])(s1)
+    return s1
+
+def buildStreetHouse(i,s1):
+  if i < len(levelPiano[0]):
+    params = parseLines(0,i,levelPiano)
+    a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
+    a_off = OFFSET([0.0, 0.0, 3.0])(a_pol)
+    s2 = STRUCT([a_off, s1])
+    return buildStreetHouse(i+1,s2)
+  else:
+    s1 = SOLIDIFY(SKEL_2(s1))
+    s1=STRUCT([T(3)(5.0),s1])
+    s1 = TEXTURE([pianoTexture, TRUE, FALSE, 1, 1, 0, 1, 10])(s1)
     return s1
 
 def buildHouseBase(i,s1):
   if i < len(levelHouse[0]):
     params = parseLines(0,i,levelHouse)
     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
-    a_off = OFFSET([0.0, 0.0, 5.0])(a_pol)
+    a_off = OFFSET([0.0, 0.0, 3.0])(a_pol)
     s2 = STRUCT([a_off, s1])
     return buildHouseBase(i+1,s2)
   else:
+    params = parseLines(0,i,levelHouse)
     s1 = SOLIDIFY(SKEL_2(s1))
-    s1 = TEXTURE([asphaltTexture, TRUE, FALSE, 1, 1, 0, 1, 1])(s1)
+    h2 = house.createMoreHouse(0,initStruct,0.0)
+    h2=STRUCT([T([1,2,3])([params[0]-params[2],params[1]-params[3],2.0]),h2])
+    s1 = STRUCT([h2, s1])
     return s1
 
 def buildHouse():
   garden_level = buildGarden(0,initStruct)
   street_level = buildStreet(0,initStruct)
   house_level = buildHouseBase(0,initStruct)
+  streetHouse_level = buildStreetHouse(0,initStruct)
   house=STRUCT([initStruct,T(3)(0.0),garden_level])
-  house=STRUCT([house,T(3)(5.0),street_level])
-  house=STRUCT([house,T(3)(5.0),house_level])
+  house=STRUCT([house,T(3)(2.0),street_level])
+  house=STRUCT([house,T(3)(2.0),house_level])
+  house=STRUCT([house,T(3)(2.0),streetHouse_level])
   return house
 
 def createCity(i,s1,d):

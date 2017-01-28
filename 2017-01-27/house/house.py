@@ -4,18 +4,17 @@ import numpy as np
 import sys, os
 
 sys.setrecursionlimit(1500)
-dirPath = '/Users/redpanda/Desktop/Grafica/ggpl/2017-01-13'
 
 """texture vari livelli della casa"""
-pavTexture = dirPath+'/texture/pav2.png'
-doorWindowsTexture = dirPath+'/texture/pav2.png'
-wallTexture = dirPath+'/texture/wall2.jpg'
-wallStone = dirPath+'/texture/wall5.jpg'
-doorTexture = dirPath+'/texture/white_wood.jpg'
-metalTexture = dirPath+'/texture/metal.jpg'
-glassTexture = dirPath+'/texture/glass.jpg'
-roofTexture = dirPath+'/texture/roof.jpg'
-stairTexture = dirPath+'/texture/stair.jpg'
+pavTexture = "house/texture/pav2.png"
+doorWindowsTexture = "house/texture/pav2.png"
+wallTexture = "house/texture/wall2.jpg"
+wallStone = "house/texture/wall5.jpg"
+doorTexture = "house/texture/white_wood.jpg"
+metalTexture = "house/texture/metal.jpg"
+glassTexture = "house/texture/glass.jpg"
+roofTexture = "house/texture/roof.jpg"
+stairTexture = "house/texture/stair.jpg"
 
 """struttra iniziale di appoggio"""
 zero = CUBOID([.0,.0,.0])
@@ -29,15 +28,15 @@ heights = [60.0,20.0,3.5,60.0,20.0]
 def countFileDirectory(path):
   i = 0
   for name in os.listdir(path):
-      if not name.startswith('.'):
+      if not name.startswith("."):
         i = i + 1
   return i
 
 """funzione che legge i file lines di tutti i livelli della casa"""
 def readSvg(l,reading_level,path):
-  file = open(dirPath+'/params/'+path+'/lines/level-'+str(l)+'.lines','r')
+  file = open("house/params/"+path+"/lines/level-"+str(l)+".lines","r")
   data = file.read()
-  n = countFileDirectory(dirPath+'/params/'+path+'/lines/')
+  n = countFileDirectory("house/params/"+path+"/lines/")
   file.close()
   d = data.splitlines()
   reading_level = reading_level + [d]
@@ -381,9 +380,7 @@ def createMoreHouse(i,s1,d):
     s1= STRUCT([h1, s1])
     return createMoreHouse(i+1,s1,d+600.0)
   else:
-    VIEW(s1)
-
-createMoreHouse(0,initStruct,0.0)
+    return s1
 
 
 
