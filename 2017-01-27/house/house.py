@@ -375,7 +375,6 @@ def buildHouse():
 """distanziate tra loro"""
 def createMoreHouse(i,s1,d):
   if i < 1:
-    print(i)
     h1=STRUCT([T([1,2,3])([d,0.0,0.0]),buildHouse()])
     s1= STRUCT([h1, s1])
     return createMoreHouse(i+1,s1,d+600.0)

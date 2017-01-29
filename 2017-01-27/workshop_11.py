@@ -17,7 +17,6 @@ initStruct = STRUCT([zero])
 level_height = [30.0,30.0,20.0,30.0,30.0,20.0]
 heights = [60.0,20.0,3.5,60.0,20.0]
 
-
 def countFileDirectory(path):
   i = 0
   for name in os.listdir(path):
@@ -41,6 +40,7 @@ levelBase = readSvg(0,[],"base")
 levelStreet = readSvg(0,[],"street")
 levelHouse = readSvg(0,[],"house")
 levelPiano = readSvg(0,[],"piano")
+levelCurve = readSvg(0,[],"curve")
 
 def parseLines(l,i, params):
   string_line = params[l][i]
@@ -91,37 +91,74 @@ def buildHouseBase(i,s1):
     params = parseLines(0,i,levelHouse)
     a_pol = POLYLINE([[params[0],params[1]],[params[2],params[3]]])
     a_off = OFFSET([0.0, 0.0, 3.0])(a_pol)
-    s2 = STRUCT([a_off, s1])
-    return buildHouseBase(i+1,s2)
+    s1 = STRUCT([a_off, s1])
+    return buildHouseBase(i+1,s1)
   else:
-    params = parseLines(0,i,levelHouse)
     s1 = SOLIDIFY(SKEL_2(s1))
-    h2 = house.createMoreHouse(0,initStruct,0.0)
-    h2=STRUCT([T([1,2,3])([params[0]-params[2],params[1]-params[3],2.0]),h2])
-    s1 = STRUCT([h2, s1])
     return s1
 
-def buildHouse():
-  garden_level = buildGarden(0,initStruct)
-  street_level = buildStreet(0,initStruct)
-  house_level = buildHouseBase(0,initStruct)
-  streetHouse_level = buildStreetHouse(0,initStruct)
-  house=STRUCT([initStruct,T(3)(0.0),garden_level])
-  house=STRUCT([house,T(3)(2.0),street_level])
-  house=STRUCT([house,T(3)(2.0),house_level])
-  house=STRUCT([house,T(3)(2.0),streetHouse_level])
-  return house
-
-def createCity(i,s1,d):
-  if i < 1:
-    print(i)
-    h1=STRUCT([T(1)(d),buildHouse()])
-    s1= STRUCT([h1, s1])
-    return createCity(i+1,s1,d+4000.0)
+def buildHouseBase2(i,s1):
+  if i < len(levelHouse[0]):
+    params = parseLines(0,i,levelHouse)
+    h2 = house.createMoreHouse(0,initStruct,0.0)
+    if i==7 or i==15 or i==23:
+      h2 = ROTATE([1,2])(-PI/2)(h2)
+      h2 = STRUCT([T([1,2,3])([params[2]-10.0,params[3]+111.0,2.0]),h2])
+    else:
+      h2 = ROTATE([1,2])(PI/2)(h2)
+      h2 = STRUCT([T([1,2,3])([params[0]+10.0,params[1]-111.0,2.0]),h2])
+    s1 = STRUCT([h2, s1])
+    return buildHouseBase2(i+4,s1)
   else:
-    VIEW(s1)
+    return s1
 
-createCity(0,initStruct,0.0)
+def buildCurve(i,s1):
+  if i < len(levelCurve[0]):
+    params1 = parseLines(0,i,levelCurve)
+    params2 = parseLines(0,i+1,levelCurve)
+    c1 = MAP(BEZIER(S1)([[params1[2],params1[3]],[params1[0],params1[1]],[params2[2],params2[3]]]))(INTERVALS(1)(100))
+    c2 = MAP(BEZIER(S1)([[params1[2],params1[3]],[params1[0],params1[1]],[params2[0],params2[1]]]))(INTERVALS(1)(100))
+    c2 = MAP(BEZIER(S1)([[params1[0],params1[1]],[params1[2],params1[3]],[params2[2],params2[3]]]))(INTERVALS(1)(100))
+    c2 = MAP(BEZIER(S1)([[params1[0],params1[1]],[params1[2],params1[3]],[params2[0],params2[1]]]))(INTERVALS(1)(100))
+    s1 = STRUCT([s1,c1])
+    return buildCurve(i+2,s1)
+  else:
+    c1 = MAP(BEZIER(S1)([[769.729,984.396],[769.729,593.644],[1160.477,593.644]]))(INTERVALS(1)(100))
+    c2 = MAP(BEZIER(S1)([[2007.766,984.396],[2007.766,593.674],[1616.689,593.674]]))(INTERVALS(1)(100))
+    c3 = MAP(BEZIER(S1)([[769.15,2405.713],[769.15,2795.794],[1159.894,2795.794]]))(INTERVALS(1)(100))
+    c4 = MAP(BEZIER(S1)([[2007.766,2405.713],[2007.766,2795.826],[1617.028,2795.826]]))(INTERVALS(1)(100))
+    s1 = STRUCT([s1,c1])
+    s1 = STRUCT([s1,c2])
+    s1 = STRUCT([s1,c3])
+    s1 = STRUCT([s1,c4])
+    VIEW(s1)
+    return s1
+
+buildCurve(0,initStruct)
+
+# def buildHouse():
+#   garden_level = buildGarden(0,initStruct)
+#   street_level = buildStreet(0,initStruct)
+#   house_level = buildHouseBase(0,initStruct)
+#   house_level2 = buildHouseBase2(3,initStruct)
+#   streetHouse_level = buildStreetHouse(0,initStruct)
+#   house=STRUCT([initStruct,T(3)(0.0),garden_level])
+#   house=STRUCT([house,T(3)(2.0),street_level])
+#   house=STRUCT([house,T(3)(2.0),house_level])
+#   house=STRUCT([house,T(3)(2.0),house_level2])
+#   house=STRUCT([house,T(3)(2.0),streetHouse_level])
+#   return house
+
+# def createCity(i,s1,d):
+#   if i < 2:
+#     h1 = buildHouse()
+#     h1=STRUCT([T(1)(d),h1])
+#     s1= STRUCT([h1, s1])
+#     return createCity(i+1,s1,d+2000.0)
+#   else:
+#     VIEW(s1)
+
+# createCity(0,initStruct,0.0)
 
 
 
