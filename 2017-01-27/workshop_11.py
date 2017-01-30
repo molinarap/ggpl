@@ -60,6 +60,20 @@ def buildGarden(i,s1):
     s1 = TEXTURE([grassTexture, TRUE, FALSE, 1, 1, 0, 10, 1])(s1)
     return s1
 
+def buildCurve(l,i,s1):
+  if l <= len(levelCurve)-1:
+    if i < len(levelCurve[l]):
+      params1 = parseLines(l,i,levelCurve)
+      params2 = parseLines(l,i+1,levelCurve)
+      c1 = MAP(BEZIER(S1)([[params1[2],params1[3]],[params1[0],params1[1]],[params2[0],params2[1]]]))(INTERVALS(1)(32))
+      c1 = OFFSET([0.0, 0.0, 3.0])(c1)
+      s1 = STRUCT([s1,c1])
+      return buildCurve(l,i+2,s1)
+    else:
+      return buildCurve(l+1,0,s1)
+  else:
+    return s1
+
 def buildStreet(i,s1):
   if i < len(levelStreet[0]):
     params = parseLines(0,i,levelStreet)
@@ -68,8 +82,12 @@ def buildStreet(i,s1):
     s2 = STRUCT([a_off, s1])
     return buildStreet(i+1,s2)
   else:
-    s1 = SOLIDIFY(SKEL_2(s1))
-    s1=STRUCT([T(3)(5.0),s1])
+    curve = buildCurve(0,0,initStruct)
+    s1 = SOLIDIFY(s1)
+    curve = SOLIDIFY(curve)
+    s1 = UNION([s1,curve])
+    #s1 = STRUCT([s1,curve])
+    s1 = STRUCT([T(3)(5.0),s1])
     s1 = TEXTURE([asphaltTexture, TRUE, FALSE, 1, 1, 0, 1, 10])(s1)
     return s1
 
@@ -112,56 +130,32 @@ def buildHouseBase2(i,s1):
   else:
     return s1
 
-def buildCurve(i,s1):
-  if i < len(levelCurve[0]):
-    params1 = parseLines(0,i,levelCurve)
-    params2 = parseLines(0,i+1,levelCurve)
-    c1 = MAP(BEZIER(S1)([[params1[2],params1[3]],[params1[0],params1[1]],[params2[2],params2[3]]]))(INTERVALS(1)(100))
-    c2 = MAP(BEZIER(S1)([[params1[2],params1[3]],[params1[0],params1[1]],[params2[0],params2[1]]]))(INTERVALS(1)(100))
-    c2 = MAP(BEZIER(S1)([[params1[0],params1[1]],[params1[2],params1[3]],[params2[2],params2[3]]]))(INTERVALS(1)(100))
-    c2 = MAP(BEZIER(S1)([[params1[0],params1[1]],[params1[2],params1[3]],[params2[0],params2[1]]]))(INTERVALS(1)(100))
-    s1 = STRUCT([s1,c1])
-    return buildCurve(i+2,s1)
+def buildHouse():
+  garden_level = buildGarden(0,initStruct)
+  street_level = buildStreet(0,initStruct)
+  house_level = buildHouseBase(0,initStruct)
+  house_level2 = buildHouseBase2(3,initStruct)
+  streetHouse_level = buildStreetHouse(0,initStruct)
+  house=STRUCT([initStruct,T(3)(0.0),garden_level])
+  house=STRUCT([house,T(3)(2.0),street_level])
+  house=STRUCT([house,T(3)(2.0),house_level])
+  house=STRUCT([house,T(3)(2.0),house_level2])
+  house=STRUCT([house,T(3)(2.0),streetHouse_level])
+  return house
+
+def createCity(i,s1,d):
+  if i < 1:
+    h = buildHouse()
+    h1=STRUCT([T(1)(d),h])
+    h2=STRUCT([T(1)(d+1900),h])
+    h3=STRUCT([T(2)(d+2200),h])
+    h4=STRUCT([T([1,+2])([d+1900,d+2200]),h])
+    s1= STRUCT([h1,h2,h3,h4,s1])
+    return createCity(i+1,s1,d+1900.0)
   else:
-    c1 = MAP(BEZIER(S1)([[769.729,984.396],[769.729,593.644],[1160.477,593.644]]))(INTERVALS(1)(100))
-    c2 = MAP(BEZIER(S1)([[2007.766,984.396],[2007.766,593.674],[1616.689,593.674]]))(INTERVALS(1)(100))
-    c3 = MAP(BEZIER(S1)([[769.15,2405.713],[769.15,2795.794],[1159.894,2795.794]]))(INTERVALS(1)(100))
-    c4 = MAP(BEZIER(S1)([[2007.766,2405.713],[2007.766,2795.826],[1617.028,2795.826]]))(INTERVALS(1)(100))
-    s1 = STRUCT([s1,c1])
-    s1 = STRUCT([s1,c2])
-    s1 = STRUCT([s1,c3])
-    s1 = STRUCT([s1,c4])
     VIEW(s1)
-    return s1
 
-buildCurve(0,initStruct)
-
-# def buildHouse():
-#   garden_level = buildGarden(0,initStruct)
-#   street_level = buildStreet(0,initStruct)
-#   house_level = buildHouseBase(0,initStruct)
-#   house_level2 = buildHouseBase2(3,initStruct)
-#   streetHouse_level = buildStreetHouse(0,initStruct)
-#   house=STRUCT([initStruct,T(3)(0.0),garden_level])
-#   house=STRUCT([house,T(3)(2.0),street_level])
-#   house=STRUCT([house,T(3)(2.0),house_level])
-#   house=STRUCT([house,T(3)(2.0),house_level2])
-#   house=STRUCT([house,T(3)(2.0),streetHouse_level])
-#   return house
-
-# def createCity(i,s1,d):
-#   if i < 2:
-#     h1 = buildHouse()
-#     h1=STRUCT([T(1)(d),h1])
-#     s1= STRUCT([h1, s1])
-#     return createCity(i+1,s1,d+2000.0)
-#   else:
-#     VIEW(s1)
-
-# createCity(0,initStruct,0.0)
-
-
-
+createCity(0,initStruct,0.0)
 
 
 
