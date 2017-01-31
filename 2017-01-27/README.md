@@ -16,14 +16,14 @@ Nella cartella params sono stati inseriti tutti i file utili:
 - params/[directory]/lines/file.lines per la lettura dei punti della struttura
 
 I livelli sono divisi in:
-- base --> 
-- strade --> 
-- curve --> 
-- pianerottoli --> 
-- fondamenta delle case --> 
+- base --> terreno su cui si poggia la casa e le strade
+- strade --> le strade senza però la parte delle curve
+- curve --> curve delle strade realizzate all'interno del progetto con Bezier
+- pianerottoli --> pianerottolo davanti la casa
+- fondamenta --> essenziali per la posizioni delle case nel quartiere
 
-##Screenshot della modello 3D
-###Esterno della casa
+## Screenshot della modello 3D
+### Esterno della casa
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img2.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img3.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img4.png "all")
