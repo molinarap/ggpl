@@ -8,7 +8,7 @@ Data un immagine di un quartiere riprodurlo in 3D utilizzando le case del proget
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img0.png "all")
 
 ## Livelli:
-Si sono andati a creare per i prima cosa dei file SVG di tutta la struttura per poi ottenere tramite il plugin *svg2lines/* i file lines con tutte le coordinate che servivano
+Si sono andati a creare per i prima cosa dei file SVG di tutta la struttura per poi ottenere tramite il plugin *svg2lines* i file lines con tutte le coordinate che servivano
 
 Nella cartella params sono stati inseriti tutti i file utili:
 - params/[directory]/ai/file.ai per la lavorazione della piantina del quartiere
