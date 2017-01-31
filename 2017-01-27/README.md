@@ -5,7 +5,7 @@ Data un immagine di un quartiere riprodurlo in 3D utilizzando le case del proget
 
 ## Immagine di partenza per la costruzione del modello 3D:
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img.jpg "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img0.jpg "all")
+![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img0.png "all")
 
 ## Livelli:
 Si sono andati a creare per i prima cosa dei file SVG di tutta la struttura per poi ottenere tramite il plugin *svg2lines/* i file lines con tutte le coordinate che servivano
@@ -27,14 +27,4 @@ I livelli sono divisi in:
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img2.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img3.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img4.png "all")
-![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img1.png "all")
-
-###Porticato
-![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img4.png "all")
-
-###Porte e finestre
-![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img5.png "all")
-
-###Scale dal primo al secondo piano
-![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img6.png "all")
 ![alt text](https://github.com/molinarap/ggpl/blob/master/2017-01-27/images/img1.png "all")
