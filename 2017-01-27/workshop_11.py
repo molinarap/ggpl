@@ -2,9 +2,9 @@
 from pyplasm import *
 import numpy as np
 import sys, os
-import house
 
 sys.path.append("house")
+import house
 
 sys.setrecursionlimit(1500)
 
